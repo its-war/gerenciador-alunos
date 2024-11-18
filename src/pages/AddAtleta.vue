@@ -1,16 +1,16 @@
 <template>
-<AppBar/>
+<AddBar/>
 <v-main>
     <router-view />
 </v-main>
 </template>
 
 <script>
-import AppBar from "@/components/add-atleta-page/AppBar.vue";
+import AddBar from "@/components/add-atleta-page/AddBar.vue";
 
 export default {
     name: "AddAtleta",
-    components: {AppBar}
+    components: {AddBar}
 }
 </script>
 

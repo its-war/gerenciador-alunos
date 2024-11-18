@@ -50,6 +50,7 @@
       <v-bottom-navigation
         fixed
         grow
+        style="height: 7.5%;"
       >
         <v-btn @click="goHome">
           <span>Inicio</span>
@@ -148,10 +149,9 @@ export default {
 </script>
 
 <style scoped>
-/* Estilos para ajustar a aparência no mobile */
 .v-container {
   padding-top: 20px;
-  min-height: 100vh;
+  min-height: 10vh;
 }
 a
 
