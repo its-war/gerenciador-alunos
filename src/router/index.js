@@ -5,6 +5,7 @@ import HomePage from "@/pages/HomePage.vue";
 import InicioComponent from "@/components/home-page/InicioComponent.vue";
 import AddAtleta from "@/pages/AddAtleta.vue";
 import AddResponsavel from "@/pages/AddResponsavel.vue";
+import AddTurma from "@/pages/AddTurma.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,6 +30,11 @@ const router = createRouter({
       path: "/add-responsavel", // Caminho para AddAtleta
       name: "AddResponsavel",
       component: AddResponsavel,
+    },
+    {
+      path: "/add-turma", // Caminho para AddAtleta
+      name: "AddTurma",
+      component: AddTurma,
     },
   ],
 });
