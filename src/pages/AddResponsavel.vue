@@ -20,16 +20,8 @@
         <v-row justify="center">
           <v-text-field
             class="mb-4"
-            label="Nome do Atleta"
-            placeholder="Ex: Pedro Henrique"
-            outlined
-            dense
-            style="width: 90%;"
-          ></v-text-field>
-          <v-text-field
-            class="mb-4"
-            label="Data de Nascimento"
-            placeholder="Ex: 12/12/1202"
+            label="Nome do Responsável"
+            placeholder="Ex: Maria Fernanda"
             outlined
             dense
             style="width: 90%;"
@@ -44,8 +36,24 @@
           ></v-text-field>
           <v-text-field
             class="mb-4"
+            label="Email"
+            placeholder="Ex: mariafernanda2020@gmail.com"
+            outlined
+            dense
+            style="width: 90%;"
+          ></v-text-field>
+          <v-text-field
+            class="mb-4"
             label="Telefone"
             placeholder="Ex: (99) 9 9999-9999"
+            outlined
+            dense
+            style="width: 90%;"
+          ></v-text-field>
+          <v-text-field
+            class="mb-4"
+            label="Endereço"
+            placeholder="Ex: Rua Almeida Alves, 5066"
             outlined
             dense
             style="width: 90%;"
