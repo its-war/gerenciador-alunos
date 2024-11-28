@@ -17,7 +17,7 @@
           outlined
         >Registro de Turma</v-btn>
 
-        <v-btn
+        <v-btn @click="goToAddResponsavel"
           class="mb-6 button-custom"
           style="width: 70%; height: 70px; font-size: 18px;"
           outlined

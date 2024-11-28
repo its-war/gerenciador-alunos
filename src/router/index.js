@@ -36,6 +36,16 @@ const router = createRouter({
       name: "AddTurma",
       component: AddTurma,
     },
+    {
+      path: "/add-responsavel", // Caminho para AddAtleta
+      name: "AddResponsavel",
+      component: AddResponsavel,
+    },
+    {
+      path: "/add-turma", // Caminho para AddAtleta
+      name: "AddTurma",
+      component: AddTurma,
+    },
   ],
 });
 
