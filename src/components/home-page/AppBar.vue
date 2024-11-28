@@ -3,22 +3,15 @@
     <v-container>
       <!-- Cabeçalho com o título e ícone da página -->
       <v-row class="mb-6 d-flex align-center">
-        <v-col class="d-flex justify-start">
-          <v-btn icon @click="goBack">
-            <v-icon>mdi-arrow-left</v-icon>
-          </v-btn>
-        </v-col>
         <v-col class="d-flex justify-center" style="flex: 60%;">
           <h3>Pagina principal</h3>
         </v-col>
-        <v-col class="d-flex justify-end">
-          <v-icon>mdi-home</v-icon>
-        </v-col>
+        
       </v-row>
 
       <!-- Botões principais -->
       <v-row justify="center">
-        <v-btn
+        <v-btn @click="goToAddTurma"
           class="mb-6 button-custom"
           style="width: 70%; height: 70px; font-size: 18px;"
           outlined
@@ -144,6 +137,9 @@ export default {
     goToAddAtleta() {
       this.$router.push({ name: "AddAtleta" });
     },
+    goToAddTurma() {
+      this.$router.push({ name: "AddTurma" });
+    },
   },
 };
 </script>
@@ -153,7 +149,6 @@ export default {
   padding-top: 20px;
   min-height: 10vh;
 }
-a
 
 h3 {
   margin: 0;
@@ -199,6 +194,8 @@ h3 {
   z-index: 20;
 
   .v-btn{
+    width: 40%;
+    font-size: 85%;
     background-color: rgba(69,69,69,255);
   }
 }
