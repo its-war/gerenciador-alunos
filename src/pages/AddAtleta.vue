@@ -25,7 +25,7 @@
             dense
             style="width: 90%;"
           ></v-text-field>
-          <v-btn
+          <v-btn @click="goToAddResponsavel"
             class="mb-4"
             outlined
             style="width: 90%; text-align: left;"
@@ -183,6 +183,9 @@
         this.showManagePanel = false;
         this.showAddPanel = false;
       },
+      goToAddResponsavel() {
+      this.$router.push({ name: "AddResponsavel" });
+      },
       manageStudents() {
         console.log("Gerenciar Alunos clicado");
       },
@@ -194,6 +197,11 @@
       },
       addClass() {
         console.log("Adicionar Turma clicado");
+      },
+      cancelAction() {
+        console.log("Ação de cancelar executada!");
+        // Lógica para cancelar ou voltar para a página anterior
+        this.$router.go(-1); // Exemplo: voltar
       },
     },
   };
