@@ -39,6 +39,7 @@
             outlined
             dense
             style="width: 90%;"
+            v-model="atleta.nome"
           ></v-text-field>
           <v-text-field
             class="mb-4"
@@ -47,6 +48,7 @@
             outlined
             dense
             style="width: 90%;"
+            v-model="atleta.dataNascimento"
           ></v-text-field>
           <v-text-field
             class="mb-4"
@@ -55,6 +57,7 @@
             outlined
             dense
             style="width: 90%;"
+            v-model="atleta.cpf"
           ></v-text-field>
           <v-text-field
             class="mb-4"
@@ -63,6 +66,7 @@
             outlined
             dense
             style="width: 90%;"
+            v-model="atleta.telefone"
           ></v-text-field>
           <v-text-field
             class="mb-4"
@@ -71,11 +75,13 @@
             outlined
             dense
             style="width: 90%;"
+            v-model="atleta.endereco"
           ></v-text-field>
           <v-checkbox
             class="mb-4"
             label="Mora com os pais"
             style="width: 90%;"
+            v-model="atleta.moraComPais"
           ></v-checkbox>
           <v-text-field
             class="mb-4"
@@ -84,6 +90,7 @@
             outlined
             dense
             style="width: 90%;"
+            v-model="atleta.posicao"
           ></v-text-field>
           <h3 class="mb-4" style="width: 90%;">Foto do Atleta</h3>
           <v-btn
@@ -157,12 +164,26 @@
   </template>
   
   <script>
+  import FirebaseCRUD from "@/plugins/FirebaseCRUD"
   export default {
     data() {
       return {
-        showManagePanel: false, // Controle do painel de Gerenciamento
-        showAddPanel: false, // Controle do painel de Adição
+        showManagePanel: false,
+        showAddPanel: false,
+        atleta: {
+          nome: "",
+          dataNascimento: "",
+          cpf: "",
+          telefone: "",
+          endereco: "",
+          posicao: "",
+          moraComPais: false,
+        },
+        atletasCrud: null, // Instância do FirebaseCRUD
       };
+    },
+    created() {
+        this.atletasCrud = new FirebaseCRUD("atletas"); // Nome no Firestore
     },
     methods: {
       goBack() {
@@ -202,6 +223,28 @@
         console.log("Ação de cancelar executada!");
         // Lógica para cancelar ou voltar para a página anterior
         this.$router.go(-1); // Exemplo: voltar
+      },
+      async saveAction() {
+        try {
+        // Verifica se o CPF do responsável está preenchido, caso contrário, criará um novo responsável
+        if (this.atleta.responsavelCpf) {
+          console.log("Responsável já alocado:", this.atleta.responsavelCpf);
+        } else {
+          console.log("Responsável não alocado. Navegar para cadastro.");
+          // Navegar para a página de cadastro do responsável
+          this.goToAddResponsavel();
+          return;
+        }
+
+        // Salvar dados do atleta no Firestore
+        const response = await this.atletasCrud.save(this.atleta);
+        console.log("Atleta salvo com sucesso:", response);
+        
+        // Navegar de volta para a página inicial após salvar
+        this.$router.push({ name: "Home" });
+        } catch (error) {
+          console.error("Erro ao salvar atleta:", error);
+        }
       },
     },
   };

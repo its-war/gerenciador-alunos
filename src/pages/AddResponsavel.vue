@@ -25,6 +25,7 @@
             outlined
             dense
             style="width: 90%;"
+            v-model="responsavel.nome"
           ></v-text-field>
           <v-text-field
             class="mb-4"
@@ -33,6 +34,7 @@
             outlined
             dense
             style="width: 90%;"
+            v-model="responsavel.cpf"
           ></v-text-field>
           <v-text-field
             class="mb-4"
@@ -41,6 +43,7 @@
             outlined
             dense
             style="width: 90%;"
+            v-model="responsavel.email"
           ></v-text-field>
           <v-text-field
             class="mb-4"
@@ -49,6 +52,7 @@
             outlined
             dense
             style="width: 90%;"
+            v-model="responsavel.telefone"
           ></v-text-field>
           <v-text-field
             class="mb-4"
@@ -57,6 +61,7 @@
             outlined
             dense
             style="width: 90%;"
+            v-model="responsavel.endereco"
           ></v-text-field>
         </v-row>
   
@@ -84,15 +89,47 @@
   </template>
   
   <script>
+  import FirebaseCRUD from "@/plugins/FirebaseCRUD";
+
   export default {
+    data() {
+    return {
+      responsavel: {
+        nome: '',
+        cpf: '',
+        email: '',
+        telefone: '',
+        endereco: '',
+      },
+      responsaveisCrud: new FirebaseCRUD("responsaveis"), // Nome no Firestore
+    };
+  },
     methods: {
       goBack() {
         console.log("Voltar clicado");
         // Lógica para voltar à página anterior
         this.$router.go(-1);
       },
-      saveAction() {
+      async saveAction() {
         console.log("Ação de salvar executada!");
+        try {
+          // Monta o objeto pra salvar no Firestore
+          const responsavelData = {
+            nome: this.responsavel.nome,
+            cpf: this.responsavel.cpf,
+            email: this.responsavel.email,
+            telefone: this.responsavel.telefone,
+            endereco: this.responsavel.endereco,
+          };
+
+          // Chamar o método save
+          const savedData = await this.responsaveisCrud.save(responsavelData);
+
+          console.log("Responsável salvo com sucesso:", savedData);
+          this.$router.go(-1); // Voltar para a página anterior após salvar
+        } catch (error) {
+          console.error("Erro ao salvar responsável:", error);
+        }
         // Adicione a lógica para salvar os dados aqui
       },
       cancelAction() {
