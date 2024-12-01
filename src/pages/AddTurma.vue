@@ -178,10 +178,10 @@ export default {
       this.$router.push({ name: "AddTurma" });
     },
     goToManageAtleta() {
-      this.$router.push({ name: "ManageTurma" });
+      this.$router.push({ name: "ManageAtleta" });
     },
     goToManageTurma() {
-      this.$router.push({ name: "ManageAtleta" });
+      this.$router.push({ name: "ManageTurma" });
     },
     goToConfigs() {
       this.$router.push({ name: "Configs" });
