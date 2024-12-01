@@ -17,7 +17,7 @@
           outlined
         >Registro de Turma</v-btn>
 
-        <v-btn
+        <v-btn @click="goToManageTurma"
           class="mb-6 button-custom"
           style="width: 70%; height: 70px; font-size: 18px;"
           outlined
@@ -31,8 +31,7 @@
           Cadastro de Alunos
         </v-btn>
 
-
-        <v-btn
+        <v-btn @click="goToManageAtleta"
           class="mb-6 button-custom"
           style="width: 70%; height: 70px; font-size: 18px;"
           outlined
@@ -60,12 +59,12 @@
           <v-icon>mdi-plus</v-icon>
         </v-btn>
 
-        <v-btn>
+        <v-btn @click="goToConfigs">
           <span>Opções</span>
           <v-icon>mdi-cog</v-icon>
         </v-btn>
 
-        <v-btn>
+        <v-btn @click="goToPerfil">
           <span>Perfil</span>
           <v-icon>mdi-account</v-icon>
         </v-btn>
@@ -78,14 +77,14 @@
 
       <!-- Painel de Gerenciamento -->
       <div v-if="showManagePanel" class="manage-panel">
-        <v-btn @click="manageStudents">Gerenciar Alunos</v-btn>
-        <v-btn @click="manageClasses">Gerenciar Turmas</v-btn>
+        <v-btn @click="goToManageAtleta">Gerenciar Alunos</v-btn>
+        <v-btn @click="goToManageTurma">Gerenciar Turmas</v-btn>
       </div>
 
       <!-- Painel de Adição -->
       <div v-if="showAddPanel" class="add-panel">
-        <v-btn @click="addStudent">Adicionar Aluno</v-btn>
-        <v-btn @click="addClass">Adicionar Turma</v-btn>
+        <v-btn @click="goToAddAtleta">Adicionar Aluno</v-btn>
+        <v-btn @click="goToAddTurma">Adicionar Turma</v-btn>
       </div>
 
     </v-container>
@@ -102,10 +101,10 @@ export default {
   },
   methods: {
     goBack() {
-      // voltar à página anterior
+        this.$router.go(-1);
     },
     goHome() {
-      // ir à página inicial
+      this.$router.push({ name: "Home" });
     },
     toggleManagePanel() {
       this.showManagePanel = !this.showManagePanel;
@@ -122,23 +121,23 @@ export default {
       this.showManagePanel = false;
       this.showAddPanel = false;
     },
-    manageStudents() {
-      console.log("Gerenciar Alunos clicado");
-    },
-    manageClasses() {
-      console.log("Gerenciar Turmas clicado");
-    },
-    addStudent() {
-      console.log("Adicionar Aluno clicado");
-    },
-    addClass() {
-      console.log("Adicionar Turma clicado");
-    },
     goToAddAtleta() {
       this.$router.push({ name: "AddAtleta" });
     },
     goToAddTurma() {
       this.$router.push({ name: "AddTurma" });
+    },
+    goToManageAtleta() {
+      this.$router.push({ name: "ManageTurma" });
+    },
+    goToManageTurma() {
+      this.$router.push({ name: "ManageAtleta" });
+    },
+    goToConfigs() {
+      this.$router.push({ name: "Configs" });
+    },
+    goToPerfil() {
+      this.$router.push({ name: "Perfil" });
     },
   },
 };

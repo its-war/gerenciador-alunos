@@ -119,46 +119,54 @@
         </v-row>
   
         <!-- Rodapé com ícones de navegação -->
-        <v-bottom-navigation
+      <v-bottom-navigation
+        fixed
         grow
         style="height: 7.5%; position: fixed;"
-        >
-          <v-btn @click="goHome">
-            <span>Inicio</span>
-            <v-icon>mdi-home</v-icon>
-          </v-btn>
-          <v-btn @click="toggleManagePanel">
-            <span>Gerenciar</span>
-            <v-icon>mdi-format-list-bulleted</v-icon>
-          </v-btn>
-          <v-btn @click="toggleAddPanel">
-            <span>Adicionar</span>
-            <v-icon>mdi-plus</v-icon>
-          </v-btn>
-          <v-btn>
-            <span>Opções</span>
-            <v-icon>mdi-cog</v-icon>
-          </v-btn>
-          <v-btn>
-            <span>Perfil</span>
-            <v-icon>mdi-account</v-icon>
-          </v-btn>
-        </v-bottom-navigation>
-  
+      >
+        <v-btn @click="goHome">
+          <span>Inicio</span>
+          <v-icon>mdi-home</v-icon>
+        </v-btn>
+
+        <v-btn @click="toggleManagePanel">
+          <span>Gerenciar</span>
+          <v-icon>mdi-format-list-bulleted</v-icon>
+        </v-btn>
+
+        <v-btn @click="toggleAddPanel">
+          <span>Adicionar</span>
+          <v-icon>mdi-plus</v-icon>
+        </v-btn>
+
+        <v-btn @click="goToConfigs">
+          <span>Opções</span>
+          <v-icon>mdi-cog</v-icon>
+        </v-btn>
+
+        <v-btn @click="goToPerfil">
+          <span>Perfil</span>
+          <v-icon>mdi-account</v-icon>
+        </v-btn>
+
+      </v-bottom-navigation>
+
+
         <!-- Área de clique fora -->
-        <div v-if="showManagePanel || showAddPanel" class="overlay" @click="closePanels"></div>
-  
-        <!-- Painel de Gerenciamento -->
-        <div v-if="showManagePanel" class="manage-panel">
-          <v-btn @click="manageStudents">Gerenciar Alunos</v-btn>
-          <v-btn @click="manageClasses">Gerenciar Turmas</v-btn>
-        </div>
-  
-        <!-- Painel de Adição -->
-        <div v-if="showAddPanel" class="add-panel">
-          <v-btn @click="addStudent">Adicionar Aluno</v-btn>
-          <v-btn @click="addClass">Adicionar Turma</v-btn>
-        </div>
+      <div v-if="showManagePanel || showAddPanel" class="overlay" @click="closePanels"></div>
+
+      <!-- Painel de Gerenciamento -->
+      <div v-if="showManagePanel" class="manage-panel">
+        <v-btn @click="goToManageAtleta">Gerenciar Alunos</v-btn>
+        <v-btn @click="goToManageTurma">Gerenciar Turmas</v-btn>
+      </div>
+
+      <!-- Painel de Adição -->
+      <div v-if="showAddPanel" class="add-panel">
+        <v-btn @click="goToAddAtleta">Adicionar Aluno</v-btn>
+        <v-btn @click="goToAddTurma">Adicionar Turma</v-btn>
+      </div>
+
       </v-container>
     </v-app>
   </template>
@@ -194,30 +202,39 @@
       },
       toggleManagePanel() {
         this.showManagePanel = !this.showManagePanel;
+        // Garante que apenas um painel estará aberto por vez
         if (this.showManagePanel) this.showAddPanel = false;
       },
       toggleAddPanel() {
         this.showAddPanel = !this.showAddPanel;
+        // Garante que apenas um painel estará aberto por vez
         if (this.showAddPanel) this.showManagePanel = false;
       },
       closePanels() {
+        // Fecha qualquer painel que estiver aberto
         this.showManagePanel = false;
         this.showAddPanel = false;
       },
       goToAddResponsavel() {
-      this.$router.push({ name: "AddResponsavel" });
+        this.$router.push({ name: "AddResponsavel" });
       },
-      manageStudents() {
-        console.log("Gerenciar Alunos clicado");
+      goToAddAtleta() {
+        this.$router.push({ name: "AddAtleta" });
       },
-      manageClasses() {
-        console.log("Gerenciar Turmas clicado");
+      goToAddTurma() {
+        this.$router.push({ name: "AddTurma" });
       },
-      addStudent() {
-        console.log("Adicionar Aluno clicado");
+      goToManageAtleta() {
+        this.$router.push({ name: "ManageTurma" });
       },
-      addClass() {
-        console.log("Adicionar Turma clicado");
+      goToManageTurma() {
+        this.$router.push({ name: "ManageAtleta" });
+      },
+      goToConfigs() {
+        this.$router.push({ name: "Configs" });
+      },
+      goToPerfil() {
+        this.$router.push({ name: "Perfil" });
       },
       cancelAction() {
         console.log("Ação de cancelar executada!");
@@ -271,18 +288,17 @@
   }
   
   .v-bottom-navigation {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    z-index: 100;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
-  
-    .v-btn{
-      width: 20% !important;
-      padding: 0%;
-    }
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+
+  .v-btn{
+    min-width: 20% !important;
+    max-width: 20% !important;
+    padding: 0%;
   }
+}
   .overlay {
     position: fixed;
     top: 0;
