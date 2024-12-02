@@ -103,7 +103,7 @@
           <span>Opções</span>
           <v-icon>mdi-cog</v-icon>
         </v-btn>
-
+        
         <v-btn @click="goToPerfil">
           <span>Perfil</span>
           <v-icon>mdi-account</v-icon>
@@ -126,7 +126,6 @@
         <v-btn @click="goToAddAtleta">Adicionar Aluno</v-btn>
         <v-btn @click="goToAddTurma">Adicionar Turma</v-btn>
       </div>
-
     </v-container>
   </v-app>
 </template>
@@ -213,6 +212,36 @@ export default {
       console.log("Ação de cancelar executada!");
       // Lógica para cancelar ou voltar para a página anterior
       this.$router.go(-1); // Exemplo: voltar
+    },
+    toggleManagePanel() {
+      this.showManagePanel = !this.showManagePanel;
+      // Garante que apenas um painel estará aberto por vez
+      if (this.showManagePanel) this.showAddPanel = false;
+    },
+    toggleAddPanel() {
+      this.showAddPanel = !this.showAddPanel;
+      // Garante que apenas um painel estará aberto por vez
+      if (this.showAddPanel) this.showManagePanel = false;
+    },
+    closePanels() {
+      // Fecha qualquer painel que estiver aberto
+      this.showManagePanel = false;
+      this.showAddPanel = false;
+    },
+    manageStudents() {
+      console.log("Gerenciar Alunos clicado");
+    },
+    manageClasses() {
+      console.log("Gerenciar Turmas clicado");
+    },
+    addStudent() {
+      console.log("Adicionar Aluno clicado");
+    },
+    addClass() {
+      console.log("Adicionar Turma clicado");
+    },
+    goHome() {
+      this.$router.push({ name: "Home" });
     },
   },
 };

@@ -166,7 +166,6 @@
         <v-btn @click="goToAddAtleta">Adicionar Aluno</v-btn>
         <v-btn @click="goToAddTurma">Adicionar Turma</v-btn>
       </div>
-
       </v-container>
     </v-app>
   </template>
