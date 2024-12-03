@@ -1,75 +1,92 @@
 import firebaseApp from "@/plugins/firebaseApp";
-import
-  { getFirestore, collection, getDoc, getDocs, deleteDoc, updateDoc, doc, setDoc, query, orderBy, limit, startAfter, endBefore, limitToLast }
-from "firebase/firestore";
+import { getFirestore, collection, getDoc, getDocs, deleteDoc, updateDoc, doc, setDoc, query, orderBy, limit, startAfter, endBefore, limitToLast, where }
+  from "firebase/firestore";
 
 export default class FirebaseCRUD {
-  constructor (name) {
+  constructor(name) {
     this.tableName = name;
     this.database = getFirestore(firebaseApp);
     this.collection = collection(this.database, this.tableName);
   }
 
-  async getAll(){
-    try{
+  async getAll() {
+    try {
       const snapshot = await getDocs(this.collection);
       const data = [];
       snapshot.forEach((doc) => {
-        data.push({id: doc.id, ...doc.data()});
+        data.push({ id: doc.id, ...doc.data() });
       });
       return data;
-    }catch (e){
+    } catch (e) {
       console.error(e);
       return [];
     }
   }
 
-  async get(id){
-    try{
+  async getAllWhere(field, operation, value) {
+    try {
+      const q = query(
+        this.collection,
+        where(field, operation, value)
+      );
+      const docsSnap = await getDocs(q);
+      const data = [];
+      docsSnap.forEach(d => {
+        data.push({ id: d.id, ...d.data() });
+      });
+      return data;
+    } catch (e) {
+      console.error(e);
+      return [];
+    }
+  }
+
+  async get(id) {
+    try {
       const documentRef = doc(this.database, this.tableName, id);
       const docSnap = await getDoc(documentRef);
       if (!docSnap.exists()) return null;
-      return {id: docSnap.id, ...docSnap.data()};
-    }catch (e){
+      return { id: docSnap.id, ...docSnap.data() };
+    } catch (e) {
       console.error(e);
       return null;
     }
   }
 
-  async save(documentObject, documentId = null){
-    try{
+  async save(documentObject, documentId = null) {
+    try {
       const documentRef = documentId ? doc(this.collection, documentId) : doc(this.collection);
       await setDoc(documentRef, documentObject);
-      return {id: documentRef.id, ...documentObject};
-    }catch (e){
+      return { id: documentRef.id, ...documentObject };
+    } catch (e) {
       console.error(e);
     }
   }
 
-  async edit(documentObject, documentId){
-    try{
+  async edit(documentObject, documentId) {
+    try {
       const documentRef = doc(this.collection, documentId ? documentId : documentObject.id);
       await updateDoc(documentRef, documentObject);
       return true;
-    }catch (e){
+    } catch (e) {
       console.error(e);
       return false;
     }
   }
 
-  async delete(documentId){
-    try{
+  async delete(documentId) {
+    try {
       const documentRef = doc(this.collection, documentId);
       await deleteDoc(documentRef);
       return true;
-    }catch (e){
+    } catch (e) {
       console.error(e);
       return false;
     }
   }
 
-  async getFirstPage(pageSize = 10, orderField = 'id', mode = 'asc'){
-    try{
+  async getFirstPage(pageSize = 10, orderField = 'id', mode = 'asc') {
+    try {
       const q = query(
         this.collection,
         orderBy(orderField, mode),
@@ -78,7 +95,7 @@ export default class FirebaseCRUD {
       const snapshot = await getDocs(q);
       const data = [];
       snapshot.forEach((doc) => {
-        data.push({id: doc.id, ...doc.data()});
+        data.push({ id: doc.id, ...doc.data() });
       });
       const hasNextPage = data.length > pageSize;
       if (hasNextPage) data.pop();
@@ -86,7 +103,7 @@ export default class FirebaseCRUD {
         data,
         hasNextPage
       };
-    }catch (e){
+    } catch (e) {
       console.error(e);
       return {
         data: [],
@@ -95,8 +112,8 @@ export default class FirebaseCRUD {
     }
   }
 
-  async getNextPage(lastItemValue, pageSize = 10, orderField = 'id', mode = 'asc'){
-    try{
+  async getNextPage(lastItemValue, pageSize = 10, orderField = 'id', mode = 'asc') {
+    try {
       const q = query(
         this.collection,
         orderBy(orderField, mode),
@@ -106,7 +123,7 @@ export default class FirebaseCRUD {
       const snapshot = await getDocs(q);
       const data = [];
       snapshot.forEach((doc) => {
-        data.push({id: doc.id, ...doc.data()});
+        data.push({ id: doc.id, ...doc.data() });
       });
       const hasNextPage = data.length > pageSize;
       if (hasNextPage) data.pop();
@@ -114,7 +131,7 @@ export default class FirebaseCRUD {
         data,
         hasNextPage
       };
-    }catch (e){
+    } catch (e) {
       console.error(e);
       return {
         data: [],
@@ -123,8 +140,8 @@ export default class FirebaseCRUD {
     }
   }
 
-  async getPreviousPage(firstItemValue, pageSize = 10, orderField = 'id', mode = 'asc'){
-    try{
+  async getPreviousPage(firstItemValue, pageSize = 10, orderField = 'id', mode = 'asc') {
+    try {
       const q = query(
         this.collection,
         orderBy(orderField, mode),
@@ -134,7 +151,7 @@ export default class FirebaseCRUD {
       const snapshot = await getDocs(q);
       const data = [];
       snapshot.forEach((doc) => {
-        data.push({id: doc.id, ...doc.data()});
+        data.push({ id: doc.id, ...doc.data() });
       });
       const hasNextPage = data.length > pageSize;
       if (hasNextPage) data.pop();
@@ -142,7 +159,7 @@ export default class FirebaseCRUD {
         data,
         hasNextPage
       };
-    }catch (e){
+    } catch (e) {
       console.error(e);
       return {
         data: [],

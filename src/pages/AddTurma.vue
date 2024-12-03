@@ -18,72 +18,32 @@
 
       <!-- Formulário -->
       <v-row justify="center">
-        <v-select
-          class="mb-4"
-          label="Turnos"
-          v-model="selectedTurno"
-          :items="turnos"
-          outlined
-          dense
-          style="width: 90%;"
-        ></v-select>
-        <v-text-field
-          class="mb-4"
-          label="Horário"
-          placeholder="Ex: 09:00"
-          outlined
-          dense
-          style="width: 90%;"
-          v-model="turma.horario"
-        ></v-text-field>
-        <v-text-field
-          class="mb-4"
-          label="Número de Alunos"
-          placeholder="Ex: 20"
-          outlined
-          dense
-          style="width: 90%;"
-          v-model="turma.numeroAlunos"
-        ></v-text-field>
-        <v-text-field
-          class="mb-4"
-          label="Professor"
-          placeholder="Ex: Sérgio Carlos"
-          outlined
-          dense
-          style="width: 90%;"
-          v-model="turma.professor"
-        ></v-text-field>
+        <v-select class="mb-4" label="Turnos" v-model="selectedTurno" :items="turnos" outlined dense
+          style="width: 90%;"></v-select>
+        <v-text-field class="mb-4" label="Horário" placeholder="Ex: 09:00" outlined dense style="width: 90%;"
+          v-model="turma.horario"></v-text-field>
+        <v-text-field class="mb-4" label="Nome da Turma" placeholder="Ex: Turma A" outlined dense style="width: 90%;"
+          v-model="turma.nome"></v-text-field>
+        <v-text-field class="mb-4" label="Número de Alunos" placeholder="Ex: 20" outlined dense style="width: 90%;"
+          v-model="turma.numeroAlunos"></v-text-field>
+        <v-text-field class="mb-4" label="Professor" placeholder="Ex: Sérgio Carlos" outlined dense style="width: 90%;"
+          v-model="turma.professor"></v-text-field>
       </v-row>
 
       <!-- Botões de Salvar e Cancelar -->
       <v-row justify="center" class="mt-4">
-        <v-btn
-          color="green"
-          dark
-          class="mx-2"
-          @click="saveAction"
-          style="width: 120px; text-transform: none;"
-        >
+        <v-btn color="green" :loading="loading" dark class="mx-2" @click="saveAction"
+          style="width: 120px; text-transform: none;">
           Salvar
         </v-btn>
-        <v-btn
-          color="red"
-          dark
-          class="mx-2"
-          @click="cancelAction"
-          style="width: 120px; text-transform: none;"
-        >
+        <v-btn color="red" :disabled="loading" dark class="mx-2" @click="cancelAction"
+          style="width: 120px; text-transform: none;">
           Cancelar
         </v-btn>
       </v-row>
 
       <!-- Rodapé com ícones de navegação -->
-      <v-bottom-navigation
-        fixed
-        grow
-        style="height: 7.5%;"
-      >
+      <v-bottom-navigation fixed grow style="height: 7.5%;">
         <v-btn @click="goHome">
           <span>Inicio</span>
           <v-icon>mdi-home</v-icon>
@@ -103,7 +63,7 @@
           <span>Opções</span>
           <v-icon>mdi-cog</v-icon>
         </v-btn>
-        
+
         <v-btn @click="goToPerfil">
           <span>Perfil</span>
           <v-icon>mdi-account</v-icon>
@@ -112,7 +72,7 @@
       </v-bottom-navigation>
 
 
-        <!-- Área de clique fora -->
+      <!-- Área de clique fora -->
       <div v-if="showManagePanel || showAddPanel" class="overlay" @click="closePanels"></div>
 
       <!-- Painel de Gerenciamento -->
@@ -126,6 +86,15 @@
         <v-btn @click="goToAddAtleta">Adicionar Aluno</v-btn>
         <v-btn @click="goToAddTurma">Adicionar Turma</v-btn>
       </div>
+
+      <v-snackbar v-model="snackbar" location="top" :color="snackbarColor">
+        <template #text>
+          {{ message }}
+        </template>
+        <template #actions>
+          <v-btn text="Fechar" @click="snackbar = false" />
+        </template>
+      </v-snackbar>
     </v-container>
   </v-app>
 </template>
@@ -139,6 +108,7 @@ export default {
       selectedTurno: null,
       turnos: ["Manhã", "Tarde", "Noite"],
       turma: {
+        nome: "",
         turno: "",
         horario: "",
         numeroAlunos: "",
@@ -146,11 +116,16 @@ export default {
       },
       showManagePanel: false,
       showAddPanel: false,
+      firebase: new FirebaseCRUD('turmas'),
+      loading: false,
+      snackbar: false,
+      message: '',
+      snackbarColor: '',
     };
   },
   methods: {
     goBack() {
-        this.$router.go(-1);
+      this.$router.go(-1);
     },
     goHome() {
       this.$router.push({ name: "Home" });
@@ -189,44 +164,35 @@ export default {
       this.$router.push({ name: "Perfil" });
     },
     async saveAction() {
-      console.log("Ação de salvar executada!");
-  
-
       try {
+        this.loading = true;
         // Adiciona a turma no Firestore
-        const docRef = await addDoc(collection("turmas"), {
+        await this.firebase.save({
+          nome: this.turma.nome,
           turno: this.selectedTurno,
           horario: this.turma.horario,
           numeroAlunos: this.turma.numeroAlunos,
           professor: this.turma.professor,
         });
-        console.log("Turma adicionada com ID:", docRef.id);
         // Limpar os campos após salvar
-        this.turma = { turno: "", horario: "", numeroAlunos: "", professor: "" };
+        this.turma = { turno: "", horario: "", numeroAlunos: "", professor: "", nome: "" };
         this.selectedTurno = null;
+
+        this.snackbarColor = 'success';
+        this.message = 'Turma adicionada com sucesso!';
       } catch (e) {
         console.error("Erro ao adicionar turma: ", e);
+        this.snackbarColor = 'error';
+        this.message = 'Erro ao adicionar turma. Tente novamente.';
+      } finally {
+        this.loading = false;
+        this.snackbar = true;
       }
     },
     cancelAction() {
       console.log("Ação de cancelar executada!");
       // Lógica para cancelar ou voltar para a página anterior
       this.$router.go(-1); // Exemplo: voltar
-    },
-    toggleManagePanel() {
-      this.showManagePanel = !this.showManagePanel;
-      // Garante que apenas um painel estará aberto por vez
-      if (this.showManagePanel) this.showAddPanel = false;
-    },
-    toggleAddPanel() {
-      this.showAddPanel = !this.showAddPanel;
-      // Garante que apenas um painel estará aberto por vez
-      if (this.showAddPanel) this.showManagePanel = false;
-    },
-    closePanels() {
-      // Fecha qualquer painel que estiver aberto
-      this.showManagePanel = false;
-      this.showAddPanel = false;
     },
     manageStudents() {
       console.log("Gerenciar Alunos clicado");
@@ -239,9 +205,6 @@ export default {
     },
     addClass() {
       console.log("Adicionar Turma clicado");
-    },
-    goHome() {
-      this.$router.push({ name: "Home" });
     },
   },
 };
