@@ -9,7 +9,7 @@
           </v-btn>
         </v-col>
         <v-col class="d-flex justify-center" style="flex: 60%;">
-          <h3>Cadastro de Atleta</h3>
+          <h3>Cadastro de Aluno</h3>
         </v-col>
         <v-col class="d-flex justify-end">
 
@@ -25,7 +25,7 @@
         </v-btn>
         <v-select :items="turmas" item-title="nome" item-value="id" v-model="atleta.turma" label="Selecione a turma"
           outlined dense style="width: 90%;" />
-        <v-text-field class="mb-4" label="Nome do Atleta" placeholder="Ex: Pedro Henrique" outlined dense
+        <v-text-field class="mb-4" label="Nome do Aluno" placeholder="Ex: Pedro Henrique" outlined dense
           style="width: 90%;" v-model="atleta.nome"></v-text-field>
         <v-text-field class="mb-4" label="Data de Nascimento" placeholder="Ex: 12/12/1202" outlined dense
           style="width: 90%;" v-model="atleta.dataNascimento"></v-text-field>
@@ -38,7 +38,7 @@
         <v-checkbox class="mb-4" label="Mora com os pais" style="width: 90%;" v-model="atleta.moraComPais"></v-checkbox>
         <v-text-field class="mb-4" label="Posição" placeholder="Ex: Atacante" outlined dense style="width: 90%;"
           v-model="atleta.posicao"></v-text-field>
-        <h3 class="mb-4" style="width: 90%;" v-show="false">Foto do Atleta</h3>
+        <h3 class="mb-4" style="width: 90%;" v-show="false">Foto do aluno</h3>
         <v-img v-if="fotoTemp !== ''" :src="fotoTemp" alt="Foto do aluno" width="80" class="mb-4" contain/>
         <v-file-input class="mb-4" outlined style="width: 90%; text-align: left;"
                       counter-size-string="Arquivo" @change="onFileChange"
@@ -196,7 +196,7 @@ export default {
         this.loading = true;
 
         if(this.fotoData) {
-          // Salvar a foto do atleta
+          // Salvar a foto do aluno
           await this.saveFile();
         }
 
