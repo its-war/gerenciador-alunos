@@ -38,10 +38,16 @@
         <v-checkbox class="mb-4" label="Mora com os pais" style="width: 90%;" v-model="atleta.moraComPais"></v-checkbox>
         <v-text-field class="mb-4" label="Posição" placeholder="Ex: Atacante" outlined dense style="width: 90%;"
           v-model="atleta.posicao"></v-text-field>
-        <h3 class="mb-4" style="width: 90%;">Foto do Atleta</h3>
-        <v-btn class="mb-4" outlined style="width: 90%; text-align: left;">
-          Clique para inserir Foto
-        </v-btn>
+        <h3 class="mb-4" style="width: 90%;" v-show="false">Foto do Atleta</h3>
+        <v-img v-if="fotoTemp !== ''" :src="fotoTemp" alt="Foto do aluno" width="80" class="mb-4" contain/>
+        <v-file-input class="mb-4" outlined style="width: 90%; text-align: left;"
+                      counter-size-string="Arquivo" @change="onFileChange"
+                      accept="image/png, image/jpeg, image/bmp, image/jpg, image/webp"
+                      label="Clique para inserir Foto"
+                      prepend-icon="mdi-camera"
+                      v-show="false"
+        >
+        </v-file-input>
         <v-btn color="green" :loading="loading" dark class="mx-2" @click="saveAction"
           style="width: 30%; text-transform: none; font-size: 95%">
           Salvar
@@ -69,12 +75,12 @@
           <v-icon>mdi-plus</v-icon>
         </v-btn>
 
-        <v-btn @click="goToConfigs">
+        <v-btn @click="goToConfigs" v-show="false">
           <span>Opções</span>
           <v-icon>mdi-cog</v-icon>
         </v-btn>
 
-        <v-btn @click="goToPerfil">
+        <v-btn @click="goToPerfil" v-show="false">
           <span>Perfil</span>
           <v-icon>mdi-account</v-icon>
         </v-btn>
@@ -102,6 +108,8 @@
 
 <script>
 import FirebaseCRUD from "@/plugins/FirebaseCRUD"
+import FirebaseStorage from "@/plugins/FirebaseStorage";
+
 export default {
   data() {
     return {
@@ -117,11 +125,15 @@ export default {
         moraComPais: false,
         responsavel: null,
         turma: null,
+        foto: '',
       },
       firebase: null, // Instância do FirebaseCRUD,
+      firebaseStorage: new FirebaseStorage(),
       responsaveis: [],
       loading: false,
       turmas: [],
+      fotoTemp: '',
+      fotoData: null,
     };
   },
   async created() {
@@ -182,6 +194,12 @@ export default {
     async saveAction() {
       try {
         this.loading = true;
+
+        if(this.fotoData) {
+          // Salvar a foto do atleta
+          await this.saveFile();
+        }
+
         // Verifica se o CPF do responsável está preenchido, caso contrário, criará um novo responsável
         if (this.atleta.responsavel.length === null) {
           // Navegar para a página de cadastro do responsável
@@ -199,6 +217,14 @@ export default {
         this.loading = false;
       }
     },
+    onFileChange(event) {
+      const file = event.target.files[0];
+      this.fotoData = file;
+      this.fotoTemp = URL.createObjectURL(file);
+    },
+    async saveFile() {
+      this.atleta.foto = await this.firebaseStorage.upload(this.fotoData, this.fotoData.type.split('/')[1]);
+    }
   },
 };
 </script>

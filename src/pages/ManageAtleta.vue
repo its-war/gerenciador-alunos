@@ -51,10 +51,7 @@
                 <strong>Endereço:</strong>
                 {{ aluno.endereco }}
               </p>
-              <p>
-                <strong>Responsável:</strong>
-                {{ aluno.nomeResponsavel }}
-              </p>
+              <AtletaResponsavel :id-responsavel="aluno.responsavel"/>
             </v-card-text>
 
             <!-- Botões de Modificar e Excluir -->
@@ -98,12 +95,12 @@
           <v-icon>mdi-plus</v-icon>
         </v-btn>
 
-        <v-btn @click="goToConfigs">
+        <v-btn @click="goToConfigs" v-show="false">
           <span>Opções</span>
           <v-icon>mdi-cog</v-icon>
         </v-btn>
 
-        <v-btn @click="goToPerfil">
+        <v-btn @click="goToPerfil" v-show="false">
           <span>Perfil</span>
           <v-icon>mdi-account</v-icon>
         </v-btn>
@@ -131,8 +128,10 @@
 
 <script>
 import FirebaseCRUD from '@/plugins/FirebaseCRUD';
+import AtletaResponsavel from "@/components/AtletaResponsavel.vue";
 
 export default {
+  components: {AtletaResponsavel},
   data() {
     return {
       showManagePanel: false,

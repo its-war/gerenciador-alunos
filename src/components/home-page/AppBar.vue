@@ -6,7 +6,7 @@
         <v-col class="d-flex justify-center" style="flex: 60%;">
           <h3>Pagina principal</h3>
         </v-col>
-        
+
       </v-row>
 
       <!-- Botões principais -->
@@ -59,12 +59,12 @@
           <v-icon>mdi-plus</v-icon>
         </v-btn>
 
-        <v-btn @click="goToConfigs">
+        <v-btn @click="goToConfigs" v-show="false">
           <span>Opções</span>
           <v-icon>mdi-cog</v-icon>
         </v-btn>
 
-        <v-btn @click="goToPerfil">
+        <v-btn @click="goToPerfil" v-show="false">
           <span>Perfil</span>
           <v-icon>mdi-account</v-icon>
         </v-btn>
@@ -175,8 +175,8 @@ h3 {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); 
-  z-index: 10; 
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 10;
 }
 
 .manage-panel, .add-panel {

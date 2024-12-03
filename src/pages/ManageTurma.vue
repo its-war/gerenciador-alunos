@@ -64,12 +64,12 @@
           <v-icon>mdi-plus</v-icon>
         </v-btn>
 
-        <v-btn @click="goToConfigs">
+        <v-btn @click="goToConfigs" v-show="false">
           <span>Opções</span>
           <v-icon>mdi-cog</v-icon>
         </v-btn>
 
-        <v-btn @click="goToPerfil">
+        <v-btn @click="goToPerfil" v-show="false">
           <span>Perfil</span>
           <v-icon>mdi-account</v-icon>
         </v-btn>
