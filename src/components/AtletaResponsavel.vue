@@ -25,8 +25,8 @@ export default {
 <template>
   <v-btn class="text-none" color="success" size="x-small" v-if="!carregado" :loading="loading" @click="carregarResponsavel">Ver Responsável</v-btn>
   <p v-else>
-    <strong>Responsável:</strong>
-    {{ responsavel?.nome }}
+    <strong v-if="responsavel">Responsável:</strong>
+    {{ responsavel ? responsavel.nome : '' }}
   </p>
 </template>
 
